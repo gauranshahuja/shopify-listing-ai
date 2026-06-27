@@ -1,0 +1,9 @@
+﻿.gcloudignore
+.git
+.gitignore
+node_modules/
+npm-debug.log
+yarn-error.log
+data/catalog.db
+data/catalog.db-shm
+data/catalog.db-wal

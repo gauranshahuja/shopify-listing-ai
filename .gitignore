@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.firebase/
+*.log
+.env
+.env.local
+.env.*.local
+backend/data/catalog.db*
+backend/secrets/
+.DS_Store
+.vscode/
+.idea/

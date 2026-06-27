@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listify — Amazon Scraper</title>
+  <style>
+
+    :root {
+      --bg: #050505; --lime: #84CC16;
+      --panel: rgba(255,255,255,0.05); --panel-2: rgba(255,255,255,0.07);
+      --line: rgba(255,255,255,0.12); --txt: #ffffff; --muted: rgba(255,255,255,0.55);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: 380px; margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px; color: var(--txt);
+      background:
+        radial-gradient(circle at top right, rgba(132,204,22,0.12), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(255,255,255,0.06), transparent 26%),
+        var(--bg);
+    }
+    .header { display: flex; align-items: center; gap: 10px; padding: 16px 16px 14px; border-bottom: 1px solid var(--line); }
+    .logo { height: 38px; width: 38px; border-radius: 12px; flex: none; border: 1px solid var(--line);
+      background: var(--panel-2); display: flex; align-items: center; justify-content: center; font-size: 18px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12); }
+    .header h1 { font-size: 15px; margin: 0; font-weight: 600; }
+    .header p { font-size: 11px; margin: 2px 0 0; color: var(--muted); }
+    .body { padding: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 12px; }
+    input[type="text"], input[type="password"], input[type="email"] {
+      width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px;
+      background: var(--panel); color: var(--txt); font-family: inherit; font-size: 13px; outline: none; }
+    input:focus { border-color: rgba(132,204,22,0.6); }
+    input::placeholder { color: rgba(255,255,255,0.35); }
+    .row { margin-bottom: 13px; }
+    .checks label { font-weight: 400; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: rgba(255,255,255,0.85); }
+    .checks input[type="checkbox"] { accent-color: var(--lime); width: 15px; height: 15px; }
+    button.primary { width: 100%; padding: 12px; border: none; border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff, #f1f1f1); color: #0a0a0a; font-family: inherit; font-size: 14px;
+      font-weight: 600; cursor: pointer; margin-bottom: 8px; transition: transform .05s ease, filter .15s ease; }
+    button.primary:hover { filter: brightness(0.94); }
+    button.primary:active { transform: translateY(1px); }
+    button.primary:disabled { opacity: 0.5; cursor: default; }
+    button.lime { width: 100%; padding: 11px; border: 1px solid rgba(132,204,22,0.5); border-radius: 14px;
+      background: rgba(132,204,22,0.16); color: #d6f59a; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+    button.lime:hover { background: rgba(132,204,22,0.24); }
+    progress { width: 100%; height: 8px; margin-top: 10px; accent-color: var(--lime); }
+    #status { margin-top: 12px; font-size: 12px; white-space: pre-wrap; min-height: 18px; color: var(--muted); line-height: 1.5; }
+    #status.error { color: #ff8d7a; }
+    #status.ok { color: var(--lime); }
+    #preview { margin-top: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px;
+      background: var(--panel); font-size: 11.5px; line-height: 1.6; display: none; }
+    #preview b { color: var(--txt); }
+    .warn { color: #ff8d7a; }
+    .meta { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 11px; color: var(--muted); line-height: 1.5; }
+    code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 5px; }
+    .userbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px;
+      padding: 9px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); font-size: 12px; }
+    .userbar .who { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .userbar .dot { height: 8px; width: 8px; border-radius: 50%; background: var(--lime); flex: none; }
+    .userbar .email { color: rgba(255,255,255,0.85); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .userbar button { border: 1px solid var(--line); background: transparent; color: var(--muted);
+      border-radius: 10px; padding: 5px 10px; font-size: 11px; cursor: pointer; flex: none; }
+    .userbar button:hover { color: var(--txt); }
+    #loginCard { margin-bottom: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    #loginCard h2 { margin: 0 0 12px; font-size: 13px; font-weight: 600; }
+    #loginMsg { font-size: 11px; margin-top: 9px; min-height: 14px; color: var(--muted); }
+    #loginMsg.error { color: #ff8d7a; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo"><img src="icon48.png" alt="Listify" width="26" height="26" /></div>
+    <div>
+      <h1>Amazon → Catalog</h1>
+      <p>This product page → ready-to-deploy sheet</p>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div id="loginCard">
+      <h2>Sign in to continue</h2>
+      <div class="row">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="username" />
+      </div>
+      <div class="row" style="margin-bottom:10px">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="lime" id="loginBtn">Sign in</button>
+      <div id="loginMsg"></div>
+    </div>
+
+    <div id="userbar" class="userbar hidden">
+      <div class="who"><span class="dot"></span><span class="email" id="userEmail"></span></div>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <div id="scrapePanel">
+
+      <div class="userbar" style="margin-bottom:12px">
+        <div class="who"><span class="dot"></span><span class="email">Collected: <b id="queueCount">0</b> products</span></div>
+        <button id="clearQueue">Clear</button>
+      </div>
+
+      <button class="lime" id="addBtn" style="margin-bottom:10px">＋ Add this product</button>
+      <div id="preview"></div>
+
+      <div class="row checks" style="margin-top:12px">
+        <label><input type="checkbox" id="enrich" checked /> AI enrich (Body, SEO, alt text, category)</label>
+      </div>
+
+      <button class="primary" id="processBtn" disabled>Process all → one CSV</button>
+      <progress id="progress" value="0" max="1" hidden></progress>
+      <div id="status"></div>
+    </div>
+
+    <div class="meta">
+      Browse Amazon and <b>Add</b> each product (collect up to ~150). When done,
+      <b>Process all</b> extracts every queued product (title, weight, images,
+      price &amp; MRP) and builds <b>one CSV</b>. The Amazon price = <b>cost (INR)</b>;
+      the tool computes Temp Price / Temp Compare. Use on listings you're authorised to import.
+    </div>
+  </div>
+  <script src="connect.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

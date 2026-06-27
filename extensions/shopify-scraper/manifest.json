@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Listify — Shopify Scraper",
+  "version": "2.0.0",
+  "description": "Scrape any Shopify store's public products and send them straight to your Listify backend, which builds a ready-to-deploy CSV (AI content, taxonomy, pricing).",
+  "permissions": ["activeTab", "tabs", "storage"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_title": "Scrape Shopify → Listify",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  }
+}

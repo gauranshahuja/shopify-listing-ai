@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Listify — Amazon Scraper",
+  "version": "1.0.0",
+  "description": "Scrape the current Amazon product page into JSON and send it to your Listify backend, which builds a ready-to-deploy CSV (AI content, taxonomy, pricing).",
+  "permissions": ["activeTab", "scripting", "storage", "notifications"],
+  "host_permissions": [
+    "https://*.amazon.in/*",
+    "https://*.amazon.com/*",
+    "https://*.amazon.co.uk/*",
+    "https://*.amazon.de/*",
+    "https://*.amazon.ae/*",
+    "https://*.amazon.com.au/*",
+    "https://*.amazon.ca/*",
+    "YOUR_BACKEND_URL/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "icons": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" },
+  "action": {
+    "default_title": "Scrape Amazon product → Listify",
+    "default_popup": "popup.html",
+    "default_icon": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" }
+  }
+}
